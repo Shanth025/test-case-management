@@ -1,6 +1,6 @@
 # Test Case Management — Documentation
 
-This repository contains the Mintlify documentation source for the [Test Case Management (TCM) tool](https://github.com/cashfree-tech/TestFlow).
+This repository contains the documentation source for the [Test Case Management (TCM) tool](https://github.com/cashfree-tech/TestFlow).
 
 ## About the TCM tool
 
@@ -45,4 +45,3 @@ The docs site will be available at `http://localhost:3000`.
 
 - [TCM source repository](https://github.com/cashfree-tech/TestFlow)
 - [Postman collection](https://www.postman.com/cashfreedevelopers/cashfree-test-case-management-tool/collection/xhr9ke4/test-case-management-tcm)
-- [Mintlify documentation](https://mintlify.com/docs)
