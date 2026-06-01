@@ -1,0 +1,159 @@
+---
+title: Collaboration
+sidebarTitle: Collaboration
+description: Add comments, react to discussions, and manage in-app notifications in the TCM tool.
+'og:title': Collaboration
+'og:description': Add threaded comments, emoji reactions, and manage in-app notifications for workflow events in the TCM tool.
+keywords: ['comments', 'notifications', 'collaboration', 'TCM tool', 'mentions', 'reactions', 'workflow notifications']
+'og:image': ''
+---
+
+The TCM tool supports collaboration through comments on features and test cases, and in-app notifications for workflow events. Email notifications are delivered via n8n. See [Get started — n8n setup](/get_started#n8n-setup-for-email-notifications) for configuration details.
+
+## Comments
+
+Comments can be added to both features and test cases. They support threaded replies, user mentions using `@user@example.com` syntax, and emoji reactions. Mentioned users receive a notification.
+
+### Add a comment
+
+Use this endpoint to add a comment to a feature or test case.
+
+**Endpoint:** `POST /api/comments`
+
+```bash
+# Comment on a feature
+curl --location 'http://localhost:8080/api/comments' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "featureId": "FEATURE-5384-1771499660303",
+  "content": "Approval looks good. Ready to proceed.",
+  "userEmail": "user@example.com"
+}'
+```
+
+To comment on a test case, replace `featureId` with `testcaseId`. To post a threaded reply, include `parentId` with the ID of the parent comment.
+
+The following table describes all supported request body fields:
+
+| Field | Required | Description |
+| :--- | :--- | :--- |
+| `content` | Yes | Comment text. Supports `@mention` syntax. |
+| `userEmail` | Yes | Email address of the user posting the comment. |
+| `featureId` | Conditional | Required when commenting on a feature. |
+| `testcaseId` | Conditional | Required when commenting on a test case. |
+| `parentId` | No | ID of the parent comment for threaded replies. |
+
+### Retrieve comments
+
+Use this endpoint to retrieve comments for a feature or test case. Pass either `featureId` or `testcaseId` as a query parameter.
+
+**Endpoint:** `GET /api/comments`
+
+To retrieve comments for a feature:
+
+```bash
+curl --location 'http://localhost:8080/api/comments?featureId=FEATURE-5384-1771499660303'
+```
+
+To retrieve comments for a test case:
+
+```bash
+curl --location 'http://localhost:8080/api/comments?testcaseId=TC-0016'
+```
+
+### Update a comment
+
+Use this endpoint to update the content of an existing comment.
+
+**Endpoint:** `PUT /api/comments/{id}`
+
+```bash
+curl --location --request PUT 'http://localhost:8080/api/comments/82' \
+--header 'Content-Type: application/json' \
+--data-raw '{"content": "Updated comment text."}'
+```
+
+### Delete a comment
+
+Use this endpoint to soft-delete a comment. Soft-deleted comments are retained in the system but are no longer visible to users.
+
+**Endpoint:** `DELETE /api/comments/{id}`
+
+```bash
+curl --location --request DELETE 'http://localhost:8080/api/comments/80'
+```
+
+### Add a reaction
+
+Use this endpoint to add an emoji reaction to a comment.
+
+**Endpoint:** `POST /api/comments/{id}/reactions`
+
+```bash
+curl --location 'http://localhost:8080/api/comments/82/reactions' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "reactionType": "LIKE",
+  "userEmail": "user@example.com"
+}'
+```
+
+### Get reactions
+
+Use this endpoint to retrieve all reactions for a comment.
+
+**Endpoint:** `GET /api/comments/{id}/reactions`
+
+```bash
+curl --location 'http://localhost:8080/api/comments/82/reactions'
+```
+
+## Notifications
+
+In-app notifications alert users to workflow events, such as test plan submissions, approval decisions, and change requests. Notifications appear in the notification bell and are marked unread until the user reads them.
+
+### Get unread notifications
+
+Use this endpoint to retrieve unread, non-deleted notifications for a user. Results are sorted most recent first.
+
+**Endpoint:** `GET /api/notifications?userEmail={userEmail}`
+
+```bash
+curl --location 'http://localhost:8080/api/notifications?userEmail=user@example.com'
+```
+
+### Get unread count
+
+Use this endpoint to retrieve the unread notification count for a user. The response returns a single integer used to populate the notification badge.
+
+**Endpoint:** `GET /api/notifications/unread-count?userEmail={userEmail}`
+
+```bash
+curl --location \
+'http://localhost:8080/api/notifications/unread-count?userEmail=user@example.com'
+```
+
+### Mark a notification as read
+
+Use this endpoint to mark a notification as read.
+
+**Endpoint:** `POST /api/notifications/{id}/read`
+
+```bash
+curl --location --request POST 'http://localhost:8080/api/notifications/123/read'
+```
+
+<Note>
+  This endpoint returns `200` even when the notification ID is not found.
+</Note>
+
+### Get notification history
+
+Use this endpoint to retrieve previously read, non-deleted notifications for a user.
+
+**Endpoint:** `GET /api/notifications/history?userEmail={userEmail}`
+
+```bash
+curl --location \
+'http://localhost:8080/api/notifications/history?userEmail=user@example.com'
+```
