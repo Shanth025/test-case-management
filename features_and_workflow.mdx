@@ -1,0 +1,206 @@
+---
+title: Features and Workflow
+sidebarTitle: Features and Workflow
+description: Create and manage features, build test plans, and move them through the approval and sign-off workflow.
+'og:title': Features and Workflow
+'og:description': Create and manage features, build test plans, and move them through the approval and sign-off workflow.
+keywords: ['features', 'workflow', 'test plan', 'approval', 'sign-off', 'draft', 'TCM tool', 'feature management', 'workflow lifecycle', 'approvers']
+'og:image': ''
+---
+
+A feature is the top-level container for a test plan in the TCM tool. It groups test cases, records approvers, and tracks the full workflow lifecycle from draft through approval, testing, and final sign-off.
+
+## Workflow lifecycle
+
+Each feature moves through the following stages:
+
+| Stage | Description |
+| :--- | :--- |
+| **Draft** | Feature created. Test cases can be added, edited, or removed freely. |
+| **In review** | Test plan submitted for approval. Approvers receive email notifications. |
+| **Changes requested** | An approver requested changes. The workflow reverts to the draft stage for revision. |
+| **Approved** | All approvers have approved. The testing phase becomes visible to test engineers. |
+| **Testing complete** | The test engineer marks all assigned test cases as complete. |
+| **Signed off** | Feature is locked and cannot be edited or deleted after this point. |
+
+The following diagram shows the workflow progression:
+
+```
+Draft → In review → Approved → Testing complete → Signed off
+              ↑          |
+              └── Changes requested (revision loop)
+```
+
+## Create a feature
+
+Use this endpoint to create a new feature. On creation, a workflow record and an initial version history entry are written automatically.
+
+**Endpoint:** `POST /api/feature/create`
+
+```bash
+curl --location 'http://localhost:8080/api/feature/create' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "jiraLink": "https://jira.example.com/FEATURE-5384",
+    "featureName": "My Feature",
+    "featureDesc": "Integrate new payment gateway",
+    "team": "paymentsnew",
+    "service": "payment-service",
+    "testEngineer": "john.doe@example.com",
+    "approvers": ["manager1@example.com", "manager2@example.com"],
+    "currUser": "john.doe@example.com",
+    "featureStatus": "DRAFT",
+    "testcaseIds": [4428, 4429]
+}'
+```
+
+The following table describes all supported fields for the create request:
+
+| Field | Required | Description |
+| :--- | :--- | :--- |
+| `featureName` | Yes | Display name for the feature. |
+| `team` | Yes | Pod responsible for this feature. |
+| `service` | Yes | Service associated with this feature. |
+| `testEngineer` | Yes | Email address of the assigned test engineer. |
+| `approvers` | Yes | Array of up to two approver email addresses. |
+| `currUser` | Yes | Email address of the user creating the feature. |
+| `featureDesc` | No | Short description of the feature. |
+| `jiraLink` | No | URL to the associated Jira ticket. |
+| `featureStatus` | No | Initial status. Defaults to `DRAFT`. |
+| `testcaseIds` | No | Array of existing test case IDs to link at creation time. |
+
+## List and filter features
+
+Use this endpoint to retrieve a list of features. You can filter results using the supported query parameters.
+
+**Endpoint:** `GET /api/feature/all`
+
+```bash
+curl --location 'http://localhost:8080/api/feature/all'
+```
+
+The following query parameters are supported: `featureName`, `featureId`, `status`, `team`, `service`, `team_members`, `size` (default `30`), and `currPageNo` (default `1`).
+
+The response includes the following counts: `featureList`, `totalFeature`, `activeFeature`, `signedOff`, and `approvalPending`.
+
+To load a single feature by ID, pass `featureId` as a query parameter.
+
+## Update a feature
+
+Use this endpoint to update feature fields. Each update writes a new version history entry. Features that have been signed off cannot be updated.
+
+**Endpoint:** `PUT /api/feature/update`
+
+```bash
+curl --location --request PUT 'http://localhost:8080/api/feature/update' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "featureId": "FEATURE-5384-1771499660303",
+    "featureName": "Updated Feature Name",
+    "featureDesc": "Updated description",
+    "jiraLink": "https://jira.example.com/FEATURE-5384",
+    "team": "pod-name",
+    "service": "service-name",
+    "testEngineer": "engineer@example.com",
+    "approvers": ["approver1@example.com", "approver2@example.com"],
+    "currUser": "youruser@example.com"
+}'
+```
+
+## Delete a feature
+
+Use this endpoint to soft-delete a feature. The action is recorded in version history. Features that have been signed off cannot be deleted.
+
+**Endpoint:** `DELETE /api/feature/delete/{featureId}`
+
+```bash
+curl --location --request DELETE \
+'http://localhost:8080/api/feature/delete/FEATURE-5384-1771498155531' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "currUser": "youruser@example.com"
+}'
+```
+
+## Lookup data
+
+Use this endpoint to retrieve valid teams, services, and users for populating feature forms and filter controls. This endpoint is also used by the KPI dashboard for the team filter.
+
+**Endpoint:** `GET /api/feature/lookup-data`
+
+```bash
+curl --location 'http://localhost:8080/api/feature/lookup-data'
+```
+
+## Version history
+
+Every create, update, and delete action on a feature is recorded as a versioned snapshot. Use version history for auditing, debugging, and review purposes.
+
+**Endpoint:** `GET /api/feature/{feature_id}/versions`
+
+```bash
+curl --location \
+'http://localhost:8080/api/feature/FEATURE-5384-1771499660303/versions'
+```
+
+## Workflow actions
+
+All workflow transitions are performed through a single endpoint. The action taken depends on the value passed in `featureWorkflowCategory`.
+
+**Endpoint:** `PATCH /api/feature/update/workflow/detail/{featureId}`
+
+```bash
+curl --location --request PATCH \
+'http://localhost:8080/api/feature/update/workflow/detail/FEATURE-5384-1771499660303' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "featureWorkflowCategory": "SEND_FOR_REVIEW",
+  "currUser": "jane.doe@example.com",
+  "testcaseIds": ["TC-1001", "TC-1002"]
+}'
+```
+
+The endpoint returns the updated workflow state after each action.
+
+<Note>
+  If the test plan is modified after approval or testing has progressed, the workflow may revert to an earlier stage based on backend rules.
+</Note>
+
+### Workflow category reference
+
+The following table describes the available workflow categories and their effects:
+
+| `featureWorkflowCategory` | Triggered by | Description |
+| :--- | :--- | :--- |
+| `SAVE_TEST_PLAN` | Test engineer | Saves the current set of linked test cases as the test plan. |
+| `SEND_FOR_REVIEW` | Test engineer | Submits the test plan for approval. Approvers are notified by email. |
+| `APPROVE` | Approver | Approves the test plan and moves the feature to the approved state. |
+| `NEED_CHANGES` | Approver | Requests changes and reverts the feature to the draft stage. |
+| `MARK_TESTING_COMPLETE` | Test engineer | Marks the testing phase as complete. |
+| `SEND_SIGNOFF` | Test engineer | Signs off the feature and locks it from further edits. |
+
+### Read the current workflow state
+
+Use this endpoint to retrieve the current stage, step states, and approval actions recorded for a feature.
+
+**Endpoint:** `GET /api/feature/workflow/state/{featureId}`
+
+```bash
+curl --location \
+'http://localhost:8080/api/feature/workflow/state/FEATURE-5384-1771499660303'
+```
+
+### Get test cases linked to a feature
+
+Use this endpoint to retrieve all test cases linked to a specific feature.
+
+**Endpoint:** `GET /api/feature/get/testcases/{featureId}`
+
+```bash
+curl --location \
+'http://localhost:8080/api/feature/get/testcases/FEATURE-5384-1771498155531'
+```
+
+To retrieve test cases grouped by type, use the following endpoint:
+
+**Endpoint:** `GET /api/feature/get/testcases-by-type/{featureId}`

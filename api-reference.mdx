@@ -1,0 +1,170 @@
+---
+title: API Reference
+sidebarTitle: API reference
+description: Complete endpoint reference for all TCM controllers, grouped by domain.
+'og:title': API Reference
+'og:description': Explore the complete TCM endpoint reference, organized by domain, with curl examples and links to detailed guides.
+keywords: ['API reference', 'TCM endpoints', 'REST API', 'Postman collection', 'TCM tool']
+'og:image': ''
+---
+
+All TCM endpoints are available in a single Postman collection. Use it to explore and test every API without writing code. To open the collection, select the link below:
+
+[Open the Postman collection](https://www.postman.com/cashfreedevelopers/cashfree-test-case-management-tool/collection/xhr9ke4/test-case-management-tcm?sideView=agentMode)
+
+To run requests against your local stack, set the base URL to `http://localhost:8080` and ensure the TCM stack is running. See [Get started](/get_started).
+
+## Users
+
+Base route: `/api/users`
+
+This domain manages user records, lookup, and role assignment. Role update operations are restricted to admins. Google Sign-in returns `403` if the user's email is not pre-registered.
+
+The following endpoints are available:
+
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `POST` | `/api/users` | Create or sync a user (including Google Sign-in). |
+| `GET` | `/api/users/me` | Get current user by email (`?email=`). |
+| `GET` | `/api/users` | List all users. |
+| `PATCH` | `/api/users/{id}/role` | Update role by user ID. Admin only. |
+| `PATCH` | `/api/users/role` | Update role by email (`?email=`). Admin only. |
+
+### Create or sync a user
+
+Use the following request to create or sync a user record, including Google Sign-in.
+
+```bash
+curl --location 'http://localhost:8080/api/users' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "email": "user@example.com",
+  "name": "Sample User",
+  "avatar": "https://example.com/avatar.png",
+  "googleId": "google-oauth-id-123",
+  "role": "USER"
+}'
+```
+
+### Update role by ID
+
+Use the following request to update a user's role by user ID.
+
+```bash
+curl --location --request PATCH 'http://localhost:8080/api/users/12/role' \
+--header 'Content-Type: application/json' \
+--data-raw '{"role": "ADMIN"}'
+```
+
+### Update role by email
+
+Use the following request to update a user's role by email address.
+
+```bash
+curl --location --request PATCH \
+'http://localhost:8080/api/users/role?email=user@example.com' \
+--header 'Content-Type: application/json' \
+--data-raw '{"role": "USER"}'
+```
+
+## Test cases
+
+Base route: `/api/testcases`
+
+This domain supports full CRUD operations, versioning, revert, restore, and bulk delete for test cases. For request details and field references, see [Test cases](/test_cases).
+
+The following endpoints are available:
+
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `POST` | `/api/testcases/create` | Create one or more test cases. |
+| `PUT` | `/api/testcases/update/{testcase_id}` | Update a test case by ID. |
+| `GET` | `/api/testcases/search/testcases` | Search test cases (KPI and analytics). |
+| `GET` | `/api/testcases/all` | List all test cases (paginated). |
+| `DELETE` | `/api/testcases/delete/{testcase_id}` | Soft-delete a single test case. |
+| `DELETE` | `/api/testcases/bulk-delete` | Soft-delete multiple test cases. |
+| `GET` | `/api/testcases/{testcase_id}/versions` | Get version history for a test case. |
+| `PUT` | `/api/testcases/revert/{testcase_id}/{version}` | Revert a test case to a prior version. |
+| `PUT` | `/api/testcases/restore/{testcase_id}` | Restore a soft-deleted test case. Admin only. |
+| `POST` | `/api/disabled-testcases` | Mark test cases as disabled. |
+
+## Features
+
+Base route: `/api/feature`
+
+This domain supports feature CRUD operations, workflow transitions, test case linking, and version history. For request details, see [Features and workflow](/features_and_workflow).
+
+The following endpoints are available:
+
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `POST` | `/api/feature/create` | Create a feature. |
+| `GET` | `/api/feature/all` | List features (filterable, paginated). |
+| `PUT` | `/api/feature/update` | Update feature fields. |
+| `DELETE` | `/api/feature/delete/{featureId}` | Soft-delete a feature. |
+| `GET` | `/api/feature/workflow/state/{featureId}` | Get current workflow state. |
+| `PATCH` | `/api/feature/update/workflow/detail/{featureId}` | Perform a workflow transition. |
+| `GET` | `/api/feature/get/testcases/{featureId}` | Get test cases linked to a feature. |
+| `GET` | `/api/feature/get/testcases-by-type/{featureId}` | Get linked test cases grouped by type. |
+| `PATCH` | `/api/feature/mark-devo-assisted/{featureId}` | Mark test cases as Devo-assisted. |
+| `GET` | `/api/feature/{feature_id}/versions` | Get feature version history. |
+| `GET` | `/api/feature/lookup-data` | Get lookup values for teams, services, and users. |
+
+## KPI
+
+Base route: `/kpi`
+
+This domain provides automation coverage metrics by team, priority, and test case type. For query parameter details and filter behavior, see [Dashboard and KPI](/dashboard_and_kpi).
+
+The following endpoints are available:
+
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET` | `/kpi/get/teams` | List teams available in the KPI module. |
+| `GET` | `/kpi/team/automation-coverage/p0p1` | P0/P1 automation coverage by team. |
+| `GET` | `/kpi/team/automation-coverage/backend-frontend` | Backend vs. frontend coverage by team. |
+
+## Comments
+
+Base route: `/api/comments`
+
+This domain supports comments and reactions on features and test cases. For request details, see [Collaboration](/collaboration).
+
+The following endpoints are available:
+
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `POST` | `/api/comments` | Add a comment to a feature or test case. |
+| `GET` | `/api/comments` | Get comments by `featureId` or `testcaseId`. |
+| `PUT` | `/api/comments/{id}` | Update a comment. |
+| `DELETE` | `/api/comments/{id}` | Soft-delete a comment. |
+| `POST` | `/api/comments/{id}/reactions` | Add a reaction to a comment. |
+| `GET` | `/api/comments/{id}/reactions` | Get reactions for a comment. |
+
+## Notifications
+
+Base route: `/api/notifications`
+
+This domain manages in-app notifications for workflow events. For request details, see [Collaboration](/collaboration).
+
+The following endpoints are available:
+
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET` | `/api/notifications` | Get unread notifications for a user. |
+| `GET` | `/api/notifications/unread-count` | Get unread notification count for a user. |
+| `POST` | `/api/notifications/{id}/read` | Mark a notification as read. |
+| `GET` | `/api/notifications/history` | Get read notification history for a user. |
+
+## Migration
+
+Base route: `/api/google-sheets`
+
+This domain supports Google Sheets import and import history. For setup prerequisites and request details, see [Import](/import).
+
+The following endpoints are available:
+
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `POST` | `/api/google-sheets/import-testcases` | Import test cases from a Google Sheet. |
+| `GET` | `/api/google-sheets/history` | Get paginated import history. |

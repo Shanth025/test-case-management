@@ -1,0 +1,203 @@
+---
+title: Test Cases
+sidebarTitle: Test Cases
+description: Learn how to create, update, search, delete, version, revert, and restore test cases in the TCM tool.
+'og:title': Test Cases
+'og:description': Learn how to create, update, search, delete, version, revert, and restore test cases in the TCM tool.
+keywords: ['test cases', 'TCM tool', 'create test cases', 'update test cases', 'search test cases', 'delete test cases', 'version history', 'revert test case', 'restore test case', 'bulk delete', 'automation status', 'test case management']
+'og:image': ''
+---
+
+Test cases are individual test steps linked to features in the TCM tool. They support full CRUD operations, advanced filtering, bulk deletion, version history, revert to a prior version, and admin-only restore.
+
+<Note>
+  Admins can delete and revert any test case. Standard users can only delete and revert test cases they created. Only admins can restore soft-deleted test cases.
+</Note>
+
+## Create test cases
+
+Use this endpoint to create one or more test cases in a single request. The request body is an array. Duplicate test case IDs are rejected, and each created test case receives an initial version history entry.
+
+**Endpoint:** `POST /api/testcases/create`
+
+```bash
+curl --location 'http://localhost:8080/api/testcases/create' \
+--header 'Content-Type: application/json' \
+--data-raw '[
+  {
+    "testcaseId": "TC-0016",
+    "testcaseName": "Verify payment gateway response",
+    "team": "QA",
+    "service": "ServiceA",
+    "testcaseType": "BACKEND",
+    "automationStatus": "MANUAL",
+    "priority": "P0",
+    "automatable": true,
+    "createdBy": "jane.doe@example.com",
+    "jiraLink": "https://jira.example.com/TC-001098",
+    "labels": ["label1", "label2"],
+    "preconditions": "User must be authenticated",
+    "description": "Validates the payment gateway response code",
+    "steps": [
+      {"name": "Step 1", "expectedResult": "Result 1"},
+      {"name": "Step 2", "expectedResult": "Result 2"}
+    ],
+    "testcaseGroups": "Group2",
+    "apiCurl": "curl -X POST /api/payment"
+  }
+]'
+```
+
+### Field reference
+
+The following table describes all supported fields for the create request:
+
+| Field | Required | Description |
+| :--- | :--- | :--- |
+| `testcaseId` | Yes | Unique identifier. Duplicate IDs are rejected. |
+| `testcaseName` | Yes | Display name for the test case. |
+| `team` | Yes | Pod responsible for this test case. |
+| `service` | Yes | Service this test case belongs to. |
+| `testcaseType` | Yes | `BACKEND` or `FRONTEND`. |
+| `automationStatus` | Yes | `AUTOMATED`, `MANUAL`, or `DISABLED`. |
+| `priority` | Yes | `P0`, `P1`, `P2`, or `P3`. |
+| `automatable` | Yes | Whether the test case is a candidate for automation. |
+| `createdBy` | Yes | Email address of the user creating the test case. |
+| `description` | No | What the test case validates. |
+| `preconditions` | No | Conditions required before execution. |
+| `steps` | No | Array of `{name, expectedResult}` step objects. |
+| `labels` | No | Label strings for categorisation and filtering. |
+| `jiraLink` | No | URL to the associated Jira ticket. |
+| `apiCurl` | No | cURL command representing the API under test. |
+| `testcaseGroups` | No | Group name for organising test cases. |
+
+## Update a test case
+
+Use this endpoint to update one or more fields on an existing test case. Each update increments the version number and writes a new version history entry. Pass `currUser` and any fields you want to update. All other fields remain unchanged.
+
+**Endpoint:** `PUT /api/testcases/update/{testcase_id}`
+
+```bash
+curl --location --request PUT \
+'http://localhost:8080/api/testcases/update/TC-0015' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "testcaseName": "Updated test case name",
+  "automationStatus": "AUTOMATED",
+  "priority": "P1",
+  "testcaseType": "BACKEND",
+  "automatable": true,
+  "steps": [
+    {"name": "Step 1", "expectedResult": "Result 1"},
+    {"name": "Step 2", "expectedResult": "Result 2 updated"}
+  ],
+  "currUser": "jane.doe@example.com"
+}'
+```
+
+## Search and filter test cases
+
+Two endpoints support test case retrieval, each suited to a different use case.
+
+### Search endpoint
+
+Use this endpoint for KPI reporting and analytics. It supports date range filtering and pagination.
+
+**Endpoint:** `GET /api/testcases/search/testcases`
+
+```bash
+curl --location 'http://localhost:8080/api/testcases/search/testcases?\
+team=qateam&testcaseType=BACKEND&automationStatus=AUTOMATED\
+&startDate=2026-01-01&endDate=2026-03-03&page=0&size=30'
+```
+
+The following parameters are supported: `team` (repeatable), `testcaseType`, `priority`, `automationStatus`, `automatable`, `startDate`, `endDate`, `page`, and `size`.
+
+### List endpoint
+
+Use this endpoint for paginated browsing and advanced filtering across all test case fields.
+
+**Endpoint:** `GET /api/testcases/all`
+
+```bash
+curl --location 'http://localhost:8080/api/testcases/all'
+```
+
+The following parameters are supported: `team`, `service`, `testcaseName`, `searchCriteria`, `testcaseGroups`, `automationStatus`, `priority`, `createdBy`, `automatable`, `labels`, `apiCurl`, `startDate`, `endDate`, `pageNumber` (default `1`), and `pageSize` (default `30`).
+
+## Delete test cases
+
+Both delete endpoints perform a soft delete. Soft-deleted test cases are retained in the system and can be restored by an admin.
+
+### Delete a single test case
+
+**Endpoint:** `DELETE /api/testcases/delete/{testcase_id}`
+
+```bash
+curl --location --request DELETE \
+'http://localhost:8080/api/testcases/delete/TC-0015' \
+--header 'Content-Type: application/json' \
+--data-raw '{"curr_user": "jane.doe@example.com"}'
+```
+
+### Bulk delete
+
+**Endpoint:** `DELETE /api/testcases/bulk-delete`
+
+```bash
+curl --location --request DELETE \
+'http://localhost:8080/api/testcases/bulk-delete' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "testcase_ids": ["TC-0015", "TC-0016"],
+  "curr_user": "jane.doe@example.com"
+}'
+```
+
+### Mark as disabled
+
+Use this endpoint to mark one or more test cases as disabled without deleting them.
+
+**Endpoint:** `POST /api/disabled-testcases`
+
+```bash
+curl --location 'http://localhost:8080/api/disabled-testcases' \
+--header 'Content-Type: application/json' \
+--data-raw '{"testcaseIds": ["TC-0015", "TC-0016"]}'
+```
+
+## Version history
+
+Every create, update, and delete action is recorded as a versioned snapshot. Use version history to audit changes or identify a version to revert to.
+
+**Endpoint:** `GET /api/testcases/{testcase_id}/versions`
+
+```bash
+curl --location 'http://localhost:8080/api/testcases/TC-0016/versions'
+```
+
+## Revert a test case
+
+Use this endpoint to restore a test case to a selected historical version. The version number continues to increment after a revert — existing history is not overwritten. Retrieve available version numbers from the version history endpoint before calling revert.
+
+**Endpoint:** `PUT /api/testcases/revert/{testcase_id}/{version}`
+
+```bash
+curl --location --request PUT \
+'http://localhost:8080/api/testcases/revert/TC-0015/1' \
+--header 'Content-Type: application/json' \
+--data-raw '{"curr_user": "jane.doe@example.com"}'
+```
+
+## Restore a deleted test case
+
+Use this endpoint to reinstate a soft-deleted test case to its last non-deleted state. This action is available to admins only.
+
+**Endpoint:** `PUT /api/testcases/restore/{testcase_id}`
+
+```bash
+curl --location --request PUT \
+'http://localhost:8080/api/testcases/restore/TC-0015' \
+--header 'Content-Type: application/json' \
+--data-raw '{"curr_user": "admin@example.com"}'
+```
