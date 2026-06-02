@@ -1,16 +1,16 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "maple",
-  "name": "Test Case Management",
+  "name": "TCM Docs",
   "logo": {
     "light": "/static/tcm-logo-light.svg",
     "dark": "/static/tcm-logo-dark.svg"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/static/tcm-favicon.png",
   "colors": {
-    "primary": "#4F6EF7",
-    "light": "#6B85F9",
-    "dark": "#3D5CE5"
+    "primary": "#00B4FF",
+    "light": "#33C3FF",
+    "dark": "#0090D9"
   },
   "navigation": {
     "groups": [
