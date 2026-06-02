@@ -15,12 +15,8 @@
   "navigation": {
     "groups": [
       {
-        "group": "Overview",
-        "pages": ["overview"]
-      },
-      {
-        "group": "Getting Started",
-        "pages": ["get_started"]
+        "group": "Test Case Management (TCM)",
+        "pages": ["overview", "get_started"]
       },
       {
         "group": "Guides",
@@ -39,3 +35,4 @@
     ]
   }
 }
+
