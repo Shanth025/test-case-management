@@ -680,6 +680,10 @@ img[src*="tcm-logo"] {
   color: #9ca3af;
 }
 
+/* ── Landing page: suppress left nav sidebar ─────────── */
+body:has(.tcm-hero) aside { display: none !important; }
+body:has(.tcm-hero) nav[aria-label="Navigation"] { display: none !important; }
+
 /* ── Responsive (new sections) ────────────────────────── */
 @media (max-width: 768px) {
   .tcm-mockup-body {
