@@ -182,7 +182,7 @@ The TCM tool uses n8n to send email notifications when workflow events occur, su
 
 1. Enable the **Gmail API** in your Google Cloud project under **APIs and Services > Library**.
 2. Create an **OAuth client ID** for a web application and add `http://localhost:5678/rest/oauth2-credential/callback` as an authorised redirect URI.
-3. Open n8n at `http://localhost:5678` and import the TCM notification workflow from the repository.
+3. Open n8n at `http://localhost:5678`. From the Workflows menu, select the import option and import the TCM notification workflow JSON file from the repository.
 4. In n8n, go to **Credentials**, create a new **Gmail OAuth2** credential using the client ID and secret from step 2, and complete the Google authorisation flow.
 5. Open the imported workflow and set it to **Active**.
 

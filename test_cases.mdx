@@ -11,7 +11,7 @@ keywords: ['test cases', 'TCM tool', 'create test cases', 'update test cases', '
 Test cases are individual test steps linked to features in the TCM tool. They support full CRUD operations, advanced filtering, bulk deletion, version history, revert to a prior version, and admin-only restore.
 
 <Note>
-  Admins can delete and revert any test case. Standard users can only delete and revert test cases they created. Only admins can restore soft-deleted test cases.
+  **ADMIN role:** Can delete and revert any test case. **USER role:** Can delete and revert only test cases where `created_by` matches `curr_user`. Only admins can restore soft-deleted test cases.
 </Note>
 
 ## Create test cases

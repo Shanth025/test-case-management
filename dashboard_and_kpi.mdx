@@ -8,7 +8,7 @@ keywords: ['KPI dashboard', 'automation coverage', 'sprint trends', 'P0 P1 cover
 'og:image': ''
 ---
 
-The KPI dashboard provides automation coverage metrics based on selected teams and time ranges. It is the primary surface for monitoring testing health across pods and sprints. All cards and charts respond to the filters applied at the top of the dashboard.
+The KPI dashboard provides automation coverage metrics based on selected teams, test case type, and time ranges. It is the primary surface for monitoring testing health across pods and sprints. All cards and charts respond to the filters applied at the top of the dashboard.
 
 ## Filters
 
@@ -75,20 +75,6 @@ teams=qateam&startDate=2026-01-01&endDate=2026-03-03'
 ```
 
 Query parameters are identical to the P0/P1 endpoint above.
-
-## Sprint trends
-
-The dashboard tracks the following sprint-level metrics over recent sprints:
-
-| Metric | Description |
-| :--- | :--- |
-| **Automation contributions** | Which testers and developers added automated test cases and when. |
-| **Test case deviations** | Net additions and removals per sprint. |
-| **Automation count deviations** | Change in automated test cases sprint over sprint. |
-
-A declining automation count relative to total test cases indicates that new test cases are being added without corresponding automation, which degrades overall coverage over time.
-
-Sprint trend data uses the same date range and team filters as the rest of the dashboard.
 
 ## KPI team list
 

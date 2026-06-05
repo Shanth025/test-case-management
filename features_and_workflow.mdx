@@ -124,7 +124,7 @@ curl --location --request DELETE \
 
 ## Lookup data
 
-Use this endpoint to retrieve valid teams, services, and users for populating feature forms and filter controls. This endpoint is also used by the KPI dashboard for the team filter.
+Use this endpoint to retrieve valid teams, services, and users. It is used across multiple parts of the application: feature create and update forms, feature and test case search filters, and the KPI dashboard team filter.
 
 **Endpoint:** `GET /api/feature/lookup-data`
 
@@ -163,7 +163,7 @@ curl --location --request PATCH \
 The endpoint returns the updated workflow state after each action.
 
 <Note>
-  If the test plan is modified after approval or testing has progressed, the workflow may revert to an earlier stage based on backend rules.
+  If the test plan is modified after approval or testing has progressed, the workflow will revert to an earlier stage.
 </Note>
 
 ### Workflow category reference
