@@ -1,30 +1,22 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Test Case Management",
+  "theme": "maple",
+  "name": "TCM Docs",
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/static/tcm-logo-light.svg",
+    "dark": "/static/tcm-logo-dark.svg"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/static/tcm-favicon.png",
   "colors": {
-    "primary": "#0D9373",
-    "light": "#07C983",
-    "dark": "#0D9373"
-  },
-  "topbarCtaButton": {
-    "name": "Postman Collection",
-    "url": "https://www.postman.com/cashfreedevelopers/cashfree-test-case-management-tool/collection/xhr9ke4/test-case-management-tcm"
+    "primary": "#00B4FF",
+    "light": "#33C3FF",
+    "dark": "#0090D9"
   },
   "navigation": {
     "groups": [
       {
-        "group": "Overview",
-        "pages": ["overview"]
-      },
-      {
-        "group": "Getting Started",
-        "pages": ["get_started"]
+        "group": "Test Case Management (TCM)",
+        "pages": ["overview", "get_started"]
       },
       {
         "group": "Guides",
@@ -41,8 +33,6 @@
         "pages": ["api-reference"]
       }
     ]
-  },
-  "footerSocials": {
-    "github": "https://github.com/cashfree-tech/TestFlow"
   }
 }
+
