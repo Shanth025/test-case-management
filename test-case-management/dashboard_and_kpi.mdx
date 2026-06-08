@@ -1,0 +1,102 @@
+---
+title: Dashboard and KPI
+sidebarTitle: Dashboard and KPI
+description: Monitor automation coverage, team performance, and sprint trends using the TCM KPI dashboard.
+'og:title': Dashboard and KPI
+'og:description': Monitor automation coverage, team performance, and sprint trends using the TCM KPI dashboard.
+keywords: ['KPI dashboard', 'automation coverage', 'sprint trends', 'P0 P1 coverage', 'frontend backend split', 'TCM tool', 'test case metrics', 'team performance']
+'og:image': ''
+---
+
+The KPI dashboard provides automation coverage metrics based on selected teams, test case type, and time ranges. It is the primary surface for monitoring testing health across pods and sprints. All cards and charts respond to the filters applied at the top of the dashboard.
+
+## Filters
+
+The following filters control the scope of all dashboard data:
+
+| Filter | Description |
+| :--- | :--- |
+| **Team** | One or more pod names. Select multiple to compare across pods. |
+| **Test case type** | `BACKEND`, `FRONTEND`, or both. |
+| **Date range** | Preset timeline or custom `startDate` and `endDate` (`YYYY-MM-DD`). |
+
+When querying the API directly, repeat the `teams` parameter to filter by multiple pods:
+
+```
+?teams=qateam&teams=platform&startDate=2026-01-01&endDate=2026-03-31
+```
+
+## Overview cards
+
+The dashboard displays the following coverage metrics. Values are derived from the test case search endpoint using the active filter combination.
+
+| Card | Description |
+| :--- | :--- |
+| **Overall automation coverage** | Percentage of all test cases in scope with `automationStatus = AUTOMATED`. |
+| **Automatable coverage** | Percentage of `automatable: true` test cases that are currently automated. |
+| **P0/P1 coverage** | Automation coverage rate scoped to `priority = P0` or `P1` test cases. |
+| **Frontend vs. backend split** | Distribution of test cases by type (`FRONTEND` / `BACKEND`). |
+
+## P0/P1 coverage by team
+
+Returns the automation coverage percentage for high-priority test cases, broken down by pod.
+
+### Endpoint
+
+`GET /kpi/team/automation-coverage/p0p1`
+
+```bash
+curl --location 'http://localhost:8080/kpi/team/automation-coverage/p0p1?\
+teams=qateam&startDate=2026-01-01&endDate=2026-03-03'
+```
+
+### Query parameters
+
+The following query parameters are supported:
+
+| Parameter | Required | Description |
+| :--- | :--- | :--- |
+| `teams` | No | Pod name. Repeat for multiple teams. |
+| `startDate` | Yes | Start date in `YYYY-MM-DD` format. |
+| `endDate` | Yes | End date in `YYYY-MM-DD` format. |
+| `testcaseType` | No | `BACKEND` or `FRONTEND`. Omit to include both. |
+
+## Backend vs. frontend coverage by team
+
+Returns the automated coverage split across `BACKEND` and `FRONTEND` test case types, grouped by team.
+
+### Endpoint
+
+`GET /kpi/team/automation-coverage/backend-frontend`
+
+```bash
+curl --location 'http://localhost:8080/kpi/team/automation-coverage/backend-frontend?\
+teams=qateam&startDate=2026-01-01&endDate=2026-03-03'
+```
+
+Query parameters are identical to the P0/P1 endpoint above.
+
+## KPI team list
+
+Returns the list of teams available in the KPI module. Use this endpoint to populate the team filter.
+
+### Endpoint
+
+`GET /kpi/get/teams`
+
+```bash
+curl --location 'http://localhost:8080/kpi/get/teams'
+```
+
+## How overview card values are calculated
+
+Each overview card value is derived from `GET /api/testcases/search/testcases` using specific filter combinations, as described in the following table:
+
+| Card | Query configuration |
+| :--- | :--- |
+| Overall automation coverage | `automationStatus=AUTOMATED` count ÷ total count |
+| Automatable coverage | `automatable=true&automationStatus=AUTOMATED` ÷ `automatable=true` |
+| P0/P1 coverage | `priority=P0` or `P1` + `automationStatus=AUTOMATED` ÷ total P0/P1 count |
+| Frontend vs. backend split | `testcaseType=FRONTEND` count vs. `testcaseType=BACKEND` count |
+
+All queries accept `team`, `startDate`, and `endDate` to scope results to the active filter selection.

@@ -1,0 +1,189 @@
+---
+title: Get Started
+sidebarTitle: Get Started
+description: Set up and run the TCM tool locally using Docker, configure your database, and sign in.
+'og:title': Get Started
+'og:description': Set up and run the TCM tool locally using Docker, configure your database, and sign in.
+keywords: ['TCM tool', 'get started', 'Docker setup', 'database configuration', 'Google OAuth', 'n8n email notifications', 'local setup', 'TCM stack', 'sign in', 'admin login']
+'og:image': ''
+---
+
+This page covers everything you need to run the TCM tool locally, from prerequisites and stack setup to database configuration, login, Google OAuth, and email notifications using n8n.
+
+## Prerequisites
+
+Ensure the following tools are installed before you begin:
+
+* **Docker and Docker Compose:** Required to run all services.
+* **JDK 17 and Maven:** Required to build the backend JAR.
+* **Git:** Required to clone the repository.
+* **Node.js and npm (optional):** Required only if running the frontend outside Docker.
+
+For Google Sign-in or Google Sheets import, you also need access to a Google Cloud project with the relevant APIs enabled.
+
+## Quick start
+
+The fastest way to run the TCM stack is using the provided setup script. From the repository root, run the following commands:
+
+```bash
+chmod +x setup.sh
+./setup.sh
+```
+
+The script performs the following steps automatically:
+
+1. Creates a `.env` file from `.env.example` if one does not already exist.
+2. Configures the database mode as internal or external.
+3. Builds the backend JAR using `mvn package -DskipTests`.
+4. Runs `docker compose build` and `docker compose up -d`.
+
+After the stack starts, access the services at the following URLs:
+
+| Service  | URL                     |
+| :------- | :---------------------- |
+| Frontend | `http://localhost:5173` |
+| Backend  | `http://localhost:8080` |
+| n8n      | `http://localhost:5678` |
+
+To stop all services, run the following command:
+
+```bash
+docker compose down
+```
+
+### Useful commands
+
+The following commands are available for managing the TCM stack:
+
+```bash
+docker compose up -d          # Start all services
+docker compose down           # Stop all services
+docker compose build          # Rebuild after backend or Dockerfile changes
+docker logs -f tcm_backend    # View backend logs
+docker logs -f tcm_frontend   # View frontend logs
+docker logs -f tcm_n8n        # View n8n logs
+docker exec -it tcm_mysql mysql -uroot -p   # Access the bundled MySQL shell
+```
+
+### Manual setup
+
+If you prefer not to use the setup script, run the following commands to set up the TCM stack manually:
+
+```bash
+git clone https://github.com/cashfree-tech/TestFlow.git
+cd TestFlow
+cp .env.example .env
+cd backend && mvn package -DskipTests && cd ..
+docker compose build
+docker compose up -d
+```
+
+## Database configuration
+
+The TCM tool supports two database modes. Set the appropriate variables in your `.env` file before starting the stack.
+
+### Internal database (recommended)
+
+The internal mode uses a bundled MySQL container (`tcm_mysql`) and is recommended for local development. Add the following variables to your `.env` file:
+
+```bash
+TCM_STACK_DB=internal
+COMPOSE_PROFILES=bundled-mysql
+DB_HOST=db
+DB_PORT=3306
+DB_NAME=tcmbackendsvc
+DB_USER=tcmbackenduser
+DB_PASSWORD=tcmbackendpassword
+```
+
+<Note>
+  You must set `COMPOSE_PROFILES=bundled-mysql` explicitly. Without it, the MySQL container will not start.
+</Note>
+
+The database schema is initialised automatically from `backend/init.sql` on the first container start.
+
+### External database
+
+The external mode uses a MySQL server that you manage. Add the following variables to your `.env` file:
+
+```bash
+TCM_STACK_DB=external
+DB_HOST=<your-host>      # Use host.docker.internal if MySQL runs on the same machine
+DB_PORT=<your-port>
+DB_NAME=<your-db-name>
+DB_USER=<your-db-user>
+DB_PASSWORD=<your-db-password>
+```
+
+<Note>
+  Do not set `COMPOSE_PROFILES=bundled-mysql` when using an external database.
+</Note>
+
+After updating your `.env` file, restart the stack:
+
+```bash
+docker compose down
+docker compose up -d
+```
+
+## Login
+
+### End users: Google Sign-in
+
+End users sign in using the **Sign in with Google** button. For sign-in to succeed, the following conditions must be met:
+
+* The user's email must already exist in the TCM users table. If the email is not pre-registered, sign-in returns a `403` error.
+* An admin must add the user's email before their first sign-in. For instructions, see the [Users API](/api-reference#users).
+
+### Admin user: username and password
+
+Use the following credentials to sign in as an admin:
+
+| Field    | Value                                               |
+| :------- | :-------------------------------------------------- |
+| Username | `admin`                                             |
+| Password | Value of `VITE_ADMIN_PASSWORD` in your `.env` file. |
+
+Admin capabilities include adding users, updating roles, deleting any test case, reverting any test case, and restoring soft-deleted test cases.
+
+### Role reference
+
+The following table describes the two supported roles:
+
+| Role    | Description                                                                 |
+| :------ | :-------------------------------------------------------------------------- |
+| `USER`  | Can create and manage their own test cases and collaborate on features.     |
+| `ADMIN` | Has full access to all test cases, user management, and restore operations. |
+
+## Google OAuth setup
+
+The TCM tool uses the browser-side credential flow via `@react-oauth/google`. No backend OAuth callback configuration is required. Follow these steps to configure Google OAuth:
+
+1. Go to the [Google Cloud Console](https://console.cloud.google.com/) and create or select a project.
+2. Go to **APIs and Services > OAuth consent screen** and complete the required fields.
+3. Go to **APIs and Services > Credentials**, select **Create credentials**, and then select **OAuth client ID**.
+4. Set the application type to **Web application** and add `http://localhost:5173` as an authorised JavaScript origin.
+5. Copy the generated client ID and add it to your `.env` file:
+
+```bash
+VITE_GOOGLE_CLIENT_ID=<your-client-id>
+```
+
+6. Rebuild the frontend container:
+
+```bash
+docker compose build
+docker compose up -d
+```
+
+## n8n setup for email notifications
+
+The TCM tool uses n8n to send email notifications when workflow events occur, such as when a test plan is submitted for review. Follow these steps to configure n8n:
+
+1. Enable the **Gmail API** in your Google Cloud project under **APIs and Services > Library**.
+2. Create an **OAuth client ID** for a web application and add `http://localhost:5678/rest/oauth2-credential/callback` as an authorised redirect URI.
+3. Open n8n at `http://localhost:5678`. From the Workflows menu, select the import option and import the TCM notification workflow JSON file from the repository.
+4. In n8n, go to **Credentials**, create a new **Gmail OAuth2** credential using the client ID and secret from step 2, and complete the Google authorisation flow.
+5. Open the imported workflow and set it to **Active**.
+
+To verify the setup, submit a test plan for review and confirm that the assigned approver receives an email notification.

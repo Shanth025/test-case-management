@@ -1,0 +1,71 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "TCM Docs",
+  "logo": {
+    "light": "/static/tcm-logo-light.svg",
+    "dark": "/static/tcm-logo-dark.svg"
+  },
+  "favicon": "/static/favicon.png",
+  "colors": {
+    "primary": "#534AB7",
+    "light": "#7F77DD",
+    "dark": "#3C3489"
+  },
+  "appearance": {
+    "default": "light",
+    "strict": false
+  },
+  "search": {
+    "prompt": "Search docs..."
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Postman Collection",
+        "href": "https://www.postman.com/cashfreedevelopers/cashfree-test-case-management-tool/collection/xhr9ke4/test-case-management-tcm"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Log In",
+      "href": "https://tcm.cashfree.com/sign-in"
+    }
+  },
+  "navigation": {
+  "groups": [
+    {
+      "group": "Test Case Management (TCM)",
+      "pages": ["overview", "get_started"]
+    },
+    {
+      "group": "Guides",
+      "pages": [
+        "features_and_workflow",
+        "test_cases",
+        "import",
+        "collaboration",
+        "dashboard_and_kpi"
+      ]
+    },
+    {
+      "group": "Reference",
+      "pages": ["api-reference"]
+    }
+  ]
+},
+  "footer": {
+    "socials": {
+      "github": "https://github.com/Shanth025/test-case-management"
+    }
+  },
+  "seo": {
+    "metatags": {
+      "og:title": "TCM — Test Case Management",
+      "og:description": "A free, open-source test case management platform that streamlines QA across the SDLC. Self-hostable, Docker-ready, MIT licensed.",
+      "og:site_name": "TCM Docs"
+    },
+    "indexing": "all"
+  }
+}
+

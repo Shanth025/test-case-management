@@ -1,0 +1,12 @@
+
+
+/* Increase logo size */
+.sidebar-logo img,
+.navbar-logo img,
+nav img[alt],
+header img[alt],
+img[alt="Test Case Management"] {
+  height: 40px !important;
+  width: auto !important;
+  max-width: none !important;
+}
