@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "maple",
+  "theme": "mint",
   "name": "TCM Docs",
   "logo": {
     "light": "/static/tcm-logo-light.svg",
