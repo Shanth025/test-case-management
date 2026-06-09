@@ -1,16 +1,29 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "maple",
+  "theme": "mint",
   "name": "TCM Docs",
   "logo": {
     "light": "/static/tcm-logo-light.svg",
     "dark": "/static/tcm-logo-dark.svg"
   },
-  "favicon": "/static/tcm-favicon.png",
+  "favicon": "/static/favicon.png",
   "colors": {
-    "primary": "#00B4FF",
-    "light": "#33C3FF",
-    "dark": "#0090D9"
+    "primary": "#534AB7",
+    "light": "#7F77DD",
+    "dark": "#3C3489"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Postman Collection",
+        "href": "https://www.postman.com/cashfreedevelopers/cashfree-test-case-management-tool/collection/xhr9ke4/test-case-management-tcm"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Log In",
+      "href": "https://tcm.cashfree.com/sign-in"
+    }
   },
   "navigation": {
     "groups": [

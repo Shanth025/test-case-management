@@ -1,0 +1,108 @@
+---
+title: Import
+sidebarTitle: Import
+description: Bulk import test cases from a Google Sheet and review past import runs.
+'og:title': Import
+'og:description': Bulk import test cases from a Google Sheet and review past import runs.
+keywords: ['import test cases', 'Google Sheets', 'bulk import', 'TCM tool', 'import history', 'test case import', 'Google Sheets API', 'feature mapping']
+'og:image': ''
+---
+
+The TCM tool supports bulk import of test cases from a Google Sheet. Each import run reads rows from the sheet, maps them to one or more features, and creates the corresponding test case records. Import history is available for review and filtering.
+
+## Prerequisites
+
+Before using the import endpoint, complete the following setup in your Google Cloud project:
+
+1. Enable the **Google Sheets API** under **APIs and Services > Library**.
+2. Create a service account and generate a JSON key.
+3. Add the following values to `backend/src/main/resources/application.yaml` under the `cashfree.google` key: `private-key-id`, `private-key`, `client-id`, and `client-email`.
+4. Share the target Google Sheet with the service account email address using Viewer access or above.
+
+<Warning>
+  Do not commit service account private keys to version control.
+</Warning>
+
+## Import test cases
+
+Use this endpoint to read rows from a Google Sheet and create the corresponding test case records. A single request can map different row ranges to different features.
+
+**Endpoint:** `POST /api/google-sheets/import-testcases`
+
+```bash
+curl --location 'http://localhost:8080/api/google-sheets/import-testcases' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "sheet_link": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit?gid=0#gid=0",
+  "current_user": "jane.doe@example.com",
+  "testcaseType": "BACKEND",
+  "features": [
+    {
+      "feature_name": "Payment Gateway Integration",
+      "start_row": 2,
+      "end_row": 30,
+      "labels": ["payout", "smoke"]
+    },
+    {
+      "feature_name": "Refund Flow",
+      "start_row": 31,
+      "end_row": 55,
+      "labels": ["refund"]
+    }
+  ]
+}'
+```
+
+### Request body
+
+The following table describes all supported fields for the import request:
+
+| Field | Required | Description |
+| :--- | :--- | :--- |
+| `sheet_link` | Yes | Full URL of the Google Sheet. |
+| `current_user` | Yes | Email address of the user triggering the import. |
+| `testcaseType` | Yes | Type assigned to all imported test cases: `BACKEND` or `FRONTEND`. |
+| `features` | Yes | Array of feature mapping objects. |
+
+### Feature mapping object
+
+The following table describes the fields in each feature mapping object:
+
+| Field | Required | Description |
+| :--- | :--- | :--- |
+| `feature_name` | Yes | Feature to associate the imported test cases with. |
+| `start_row` | Yes | First row to import. Row 1 is typically the header row. |
+| `end_row` | Yes | Last row to import, inclusive. |
+| `labels` | No | Labels applied to all test cases created from this row range. |
+
+### Response
+
+The following table describes the fields returned in the import response:
+
+| Field | Description |
+| :--- | :--- |
+| `total` | Total number of rows processed. |
+| `success` | Number of test cases successfully created. |
+| `failed` | Number of rows that could not be imported. |
+| `errors` | Error details for failed rows, including the row number and reason for failure. |
+
+## Import history
+
+Use this endpoint to retrieve a paginated list of all previous import runs. Use import history to review outcomes, confirm successful imports, and diagnose failures.
+
+**Endpoint:** `GET /api/google-sheets/history`
+
+```bash
+curl --location \
+'http://localhost:8080/api/google-sheets/history?size=30&currPageNo=1'
+```
+
+### Query parameters
+
+The following query parameters are supported:
+
+| Parameter | Required | Description |
+| :--- | :--- | :--- |
+| `size` | No | Number of results per page. Default: `30`. |
+| `currPageNo` | No | Page number to retrieve. Default: `1`. |
+| `sheet_link` | No | Filter history to runs from a specific Google Sheet URL. |
