@@ -6,19 +6,30 @@ og:title: "Test Case Management — Documentation"
 og:description: "Manage test plans, automation coverage, and approvals across your software development lifecycle."
 ---
 
+<style>{`
+  @media (max-width: 768px) {
+    .tcm-hero-illustration { display: none !important; }
+  }
+`}</style>
+
 {/* ── HERO ─────────────────────────────────────────────── */}
 <div className="tcm-page-wrapper">
-  <div className="tcm-hero">
-    <span style={{ display: "inline-block", background: "var(--tcm-bg-container)", border: "1px solid var(--tcm-border)", borderRadius: "100px", padding: "4px 14px", fontSize: "0.78rem", fontWeight: 600, color: "var(--tcm-text-secondary)", marginBottom: "20px", letterSpacing: "0.01em" }}>
-      Open Source · MIT · Self-hostable
-    </span>
-    <h1 className="tcm-hero-title">From test plan to sign-off, without the chaos.</h1>
-    <p className="tcm-hero-subtitle">
-      A free, open-source test case management platform that streamlines QA across the software development lifecycle from planning and execution to approvals and final sign-off. Built for engineering teams that care about quality.
-    </p>
-    <div className="tcm-cta-row">
-      <a href="/get_started" className="tcm-btn-primary">Get Started →</a>
-      <a href="/overview" className="tcm-btn-ghost">Read Overview</a>
+  <div className="tcm-hero" style={{ display: "flex", alignItems: "center", gap: "48px" }}>
+    <div style={{ flex: "0 0 60%", minWidth: 0 }}>
+      <span style={{ display: "inline-block", background: "var(--tcm-bg-container)", border: "1px solid var(--tcm-border)", borderRadius: "100px", padding: "4px 14px", fontSize: "0.78rem", fontWeight: 600, color: "var(--tcm-text-secondary)", marginBottom: "20px", letterSpacing: "0.01em" }}>
+        Open Source · MIT · Self-hostable
+      </span>
+      <h1 className="tcm-hero-title">From test plan to sign-off, without the chaos.</h1>
+      <p className="tcm-hero-subtitle">
+        A free, open-source test case management platform that streamlines QA across the software development lifecycle from planning and execution to approvals and final sign-off. Built for engineering teams that care about quality.
+      </p>
+      <div className="tcm-cta-row">
+        <a href="/get_started" className="tcm-btn-primary">Get Started →</a>
+        <a href="/overview" className="tcm-btn-ghost">Read Overview</a>
+      </div>
+    </div>
+    <div className="tcm-hero-illustration" style={{ flex: "0 0 40%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <img src="/static/hero-illustration.svg" alt="TCM deployment workflow illustration" style={{ width: "100%", maxWidth: "320px", height: "auto" }} />
     </div>
   </div>
 
