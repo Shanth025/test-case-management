@@ -13,98 +13,102 @@ og:description: "Manage test plans, automation coverage, and approvals across yo
 `}</style>
 
 {/* ── HERO ─────────────────────────────────────────────── */}
-<div className="tcm-page-wrapper">
-  <div className="tcm-hero" style={{ display: "flex", alignItems: "center", gap: "48px" }}>
-    <div style={{ flex: "0 0 60%", minWidth: 0 }}>
-      <span style={{ display: "inline-block", background: "var(--tcm-bg-container)", border: "1px solid var(--tcm-border)", borderRadius: "100px", padding: "4px 14px", fontSize: "0.78rem", fontWeight: 600, color: "var(--tcm-text-secondary)", marginBottom: "20px", letterSpacing: "0.01em" }}>
-        Open Source · MIT · Self-hostable
-      </span>
-      <h1 className="tcm-hero-title">From test plan to sign-off, without the chaos.</h1>
-      <p className="tcm-hero-subtitle">
-        A free, open-source test case management platform that streamlines QA across the software development lifecycle from planning and execution to approvals and final sign-off. Built for engineering teams that care about quality.
-      </p>
-      <div className="tcm-cta-row">
-        <a href="/get_started" className="tcm-btn-primary">Get Started →</a>
-        <a href="/overview" className="tcm-btn-ghost">Read Overview</a>
-      </div>
-    </div>
-    <div className="tcm-hero-illustration" style={{ flex: "0 0 40%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-      <img src="/static/hero-illustration.svg" alt="TCM deployment workflow illustration" style={{ width: "100%", maxWidth: "320px", height: "auto" }} />
-    </div>
-  </div>
-
-  {/* ── DASHBOARD MOCKUP ─────────────────────────────────── */}
-  <div className="tcm-mockup-wrapper">
-    <div className="tcm-mockup-bar">
-      <span className="tcm-mockup-dot" style={{ background: "#ef4444" }}></span>
-      <span className="tcm-mockup-dot" style={{ background: "#f59e0b" }}></span>
-      <span className="tcm-mockup-dot" style={{ background: "#22c55e" }}></span>
-      <span className="tcm-mockup-title">tcm / sprint-42 / overview</span>
-    </div>
-    <div className="tcm-mockup-body">
-      <div className="tcm-mockup-sidebar">
-        <div className="tcm-mockup-nav-item active">Overview</div>
-        <div className="tcm-mockup-nav-item">Test Plans</div>
-        <div className="tcm-mockup-nav-item">Test Cases</div>
-        <div className="tcm-mockup-nav-item">Automation</div>
-        <div className="tcm-mockup-nav-item">KPIs</div>
-        <div className="tcm-mockup-nav-item">Approvals</div>
-      </div>
-      <div className="tcm-mockup-content">
-        <div className="tcm-mockup-stats">
-          <div className="tcm-mockup-stat">
-            <div className="tcm-mockup-stat-label">Coverage</div>
-            <div className="tcm-mockup-stat-value">87%</div>
-          </div>
-          <div className="tcm-mockup-stat">
-            <div className="tcm-mockup-stat-label">Pass Rate</div>
-            <div className="tcm-mockup-stat-value">94.2%</div>
-          </div>
-          <div className="tcm-mockup-stat">
-            <div className="tcm-mockup-stat-label">Open Issues</div>
-            <div className="tcm-mockup-stat-value warning">12</div>
-          </div>
+<div className="tcm-hero">
+  <div className="tcm-page-wrapper">
+    <div className="tcm-hero-grid">
+      <div style={{ flex: "0 0 60%", minWidth: 0 }}>
+        <span className="tcm-hero-badge">
+          Open Source · MIT · Self-hostable
+        </span>
+        <h1 className="tcm-hero-title">From test plan to sign-off, without the chaos.</h1>
+        <p className="tcm-hero-subtitle">
+          A free, open-source test case management platform that streamlines QA across the software development lifecycle from planning and execution to approvals and final sign-off. Built for engineering teams that care about quality.
+        </p>
+        <div className="tcm-cta-row">
+          <a href="/get_started" className="tcm-btn-primary">Get Started →</a>
+          <a href="/overview" className="tcm-btn-ghost">Read Overview</a>
         </div>
-        <div className="tcm-mockup-rows">
-          <div className="tcm-mockup-row">
-            <span className="tcm-mockup-row-id">TC-1042</span>
-            <span className="tcm-mockup-row-name">Login with SSO</span>
-            <span className="tcm-mockup-status passed">PASSED</span>
-          </div>
-          <div className="tcm-mockup-row">
-            <span className="tcm-mockup-row-id">TC-1043</span>
-            <span className="tcm-mockup-row-name">Checkout — coupon edge case</span>
-            <span className="tcm-mockup-status running">RUNNING</span>
-          </div>
-          <div className="tcm-mockup-row">
-            <span className="tcm-mockup-row-id">TC-1044</span>
-            <span className="tcm-mockup-row-name">Webhook retries</span>
-            <span className="tcm-mockup-status failed">FAILED</span>
-          </div>
-        </div>
+      </div>
+      <div className="tcm-hero-illustration" style={{ flex: "0 0 40%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <img src="/static/hero-illustration.svg" alt="TCM deployment workflow illustration" style={{ width: "100%", maxWidth: "320px", height: "auto" }} />
       </div>
     </div>
   </div>
 </div>
 
-{/* ── STATS BAR ─────────────────────────────────────────── */}
-<div className="tcm-page-wrapper">
-  <div className="tcm-stats-bar">
-    <div className="tcm-stat-item">
-      <span className="tcm-stat-number">6</span>
-      <span className="tcm-stat-label">Workflow stages</span>
+{/* ── DASHBOARD MOCKUP + STATS ──────────────────────────── */}
+<div className="tcm-hero-to-white">
+  <div className="tcm-page-wrapper">
+    <div className="tcm-mockup-wrapper">
+      <div className="tcm-mockup-bar">
+        <span className="tcm-mockup-dot" style={{ background: "#ef4444" }}></span>
+        <span className="tcm-mockup-dot" style={{ background: "#f59e0b" }}></span>
+        <span className="tcm-mockup-dot" style={{ background: "#22c55e" }}></span>
+        <span className="tcm-mockup-title">tcm / sprint-42 / overview</span>
+      </div>
+      <div className="tcm-mockup-body">
+        <div className="tcm-mockup-sidebar">
+          <div className="tcm-mockup-nav-item active">Overview</div>
+          <div className="tcm-mockup-nav-item">Test Plans</div>
+          <div className="tcm-mockup-nav-item">Test Cases</div>
+          <div className="tcm-mockup-nav-item">Automation</div>
+          <div className="tcm-mockup-nav-item">KPIs</div>
+          <div className="tcm-mockup-nav-item">Approvals</div>
+        </div>
+        <div className="tcm-mockup-content">
+          <div className="tcm-mockup-stats">
+            <div className="tcm-mockup-stat">
+              <div className="tcm-mockup-stat-label">Coverage</div>
+              <div className="tcm-mockup-stat-value">87%</div>
+            </div>
+            <div className="tcm-mockup-stat">
+              <div className="tcm-mockup-stat-label">Pass Rate</div>
+              <div className="tcm-mockup-stat-value">94.2%</div>
+            </div>
+            <div className="tcm-mockup-stat">
+              <div className="tcm-mockup-stat-label">Open Issues</div>
+              <div className="tcm-mockup-stat-value warning">12</div>
+            </div>
+          </div>
+          <div className="tcm-mockup-rows">
+            <div className="tcm-mockup-row">
+              <span className="tcm-mockup-row-id">TC-1042</span>
+              <span className="tcm-mockup-row-name">Login with SSO</span>
+              <span className="tcm-mockup-status passed">PASSED</span>
+            </div>
+            <div className="tcm-mockup-row">
+              <span className="tcm-mockup-row-id">TC-1043</span>
+              <span className="tcm-mockup-row-name">Checkout — coupon edge case</span>
+              <span className="tcm-mockup-status running">RUNNING</span>
+            </div>
+            <div className="tcm-mockup-row">
+              <span className="tcm-mockup-row-id">TC-1044</span>
+              <span className="tcm-mockup-row-name">Webhook retries</span>
+              <span className="tcm-mockup-status failed">FAILED</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div className="tcm-stat-item">
-      <span className="tcm-stat-number">Docker</span>
-      <span className="tcm-stat-label">Ready to deploy</span>
-    </div>
-    <div className="tcm-stat-item">
-      <span className="tcm-stat-number">MIT</span>
-      <span className="tcm-stat-label">Open source license</span>
-    </div>
-    <div className="tcm-stat-item">
-      <span className="tcm-stat-number">100%</span>
-      <span className="tcm-stat-label">Self-hostable</span>
+  </div>
+  <div className="tcm-page-wrapper">
+    <div className="tcm-stats-bar">
+      <div className="tcm-stat-item">
+        <span className="tcm-stat-number">6</span>
+        <span className="tcm-stat-label">Workflow stages</span>
+      </div>
+      <div className="tcm-stat-item">
+        <span className="tcm-stat-number tcm-stat-pill">Docker</span>
+        <span className="tcm-stat-label">Ready to deploy</span>
+      </div>
+      <div className="tcm-stat-item">
+        <span className="tcm-stat-number tcm-stat-pill">MIT</span>
+        <span className="tcm-stat-label">Open source license</span>
+      </div>
+      <div className="tcm-stat-item">
+        <span className="tcm-stat-number">100%</span>
+        <span className="tcm-stat-label">Self-hostable</span>
+      </div>
     </div>
   </div>
 </div>
@@ -230,13 +234,13 @@ og:description: "Manage test plans, automation coverage, and approvals across yo
         <div className="tcm-step-title">Create features and test plans</div>
         <div className="tcm-step-desc">Scoped to sprints and feature owners.</div>
       </div>
-      <div className="tcm-step-connector">→</div>
+      <div className="tcm-step-connector"><svg width="24" height="24" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7.5 4.5l5 5.5-5 5.5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg></div>
       <div className="tcm-step">
         <div className="tcm-step-number">2</div>
         <div className="tcm-step-title">Run and track test cases</div>
         <div className="tcm-step-desc">Automated, manual, and exploratory runs.</div>
       </div>
-      <div className="tcm-step-connector">→</div>
+      <div className="tcm-step-connector"><svg width="24" height="24" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7.5 4.5l5 5.5-5 5.5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg></div>
       <div className="tcm-step">
         <div className="tcm-step-number">3</div>
         <div className="tcm-step-title">Approve and sign off</div>
@@ -246,47 +250,47 @@ og:description: "Manage test plans, automation coverage, and approvals across yo
   </div>
 </div>
 
-{/* ── CLOSING CTA ──────────────────────────────────────── */}
-<div className="tcm-page-wrapper">
-  <div className="tcm-closing-cta">
-    <div className="tcm-closing-cta-title">Ready to bring order to your testing workflow?</div>
-    <p className="tcm-closing-cta-sub">Self-host TCM in minutes. Free, open source, and built for engineering teams that care about quality.</p>
-    <div className="tcm-cta-row" style={{ justifyContent: "center" }}>
-      <a href="/get_started" className="tcm-btn-primary">Get Started →</a>
-      <a href="https://github.com/Shanth025/test-case-management" className="tcm-btn-ghost">View on GitHub</a>
+{/* ── CLOSING CTA + FOOTER ─────────────────────────────── */}
+<div className="tcm-footer-dark">
+  <div className="tcm-page-wrapper">
+    <div className="tcm-closing-cta">
+      <div className="tcm-closing-cta-title">Ready to bring order to your testing workflow?</div>
+      <p className="tcm-closing-cta-sub">Self-host TCM in minutes. Free, open source, and built for engineering teams that care about quality.</p>
+      <div className="tcm-cta-row" style={{ justifyContent: "center" }}>
+        <a href="/get_started" className="tcm-btn-primary">Get Started →</a>
+        <a href="https://github.com/Shanth025/test-case-management" className="tcm-btn-ghost">View on GitHub</a>
+      </div>
     </div>
   </div>
-</div>
+  <div className="tcm-page-wrapper">
+    <div className="tcm-footer-grid">
+      <div>
+        <p style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", margin: "0 0 12px 0" }}>Guides</p>
+        <ul style={{ listStyle: "none", padding: "0", margin: "0", display: "flex", flexDirection: "column", gap: "9px" }}>
+          <li><a href="/features_and_workflow" style={{ fontSize: "0.85rem", textDecoration: "none" }}>Features and Workflow</a></li>
+          <li><a href="/test_cases" style={{ fontSize: "0.85rem", textDecoration: "none" }}>Test Cases</a></li>
+          <li><a href="/import" style={{ fontSize: "0.85rem", textDecoration: "none" }}>Import</a></li>
+          <li><a href="/collaboration" style={{ fontSize: "0.85rem", textDecoration: "none" }}>Collaboration</a></li>
+          <li><a href="/dashboard_and_kpi" style={{ fontSize: "0.85rem", textDecoration: "none" }}>Dashboard and KPI</a></li>
+        </ul>
+      </div>
 
-{/* ── FOOTER ROW ────────────────────────────────────────── */}
-<div className="tcm-page-wrapper">
-  <div className="tcm-footer-grid">
-    <div>
-      <p style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--tcm-text-secondary)", margin: "0 0 12px 0" }}>Guides</p>
-      <ul style={{ listStyle: "none", padding: "0", margin: "0", display: "flex", flexDirection: "column", gap: "9px" }}>
-        <li><a href="/features_and_workflow" style={{ fontSize: "0.85rem", color: "var(--tcm-text-brand)", textDecoration: "none" }}>Features and Workflow</a></li>
-        <li><a href="/test_cases" style={{ fontSize: "0.85rem", color: "var(--tcm-text-brand)", textDecoration: "none" }}>Test Cases</a></li>
-        <li><a href="/import" style={{ fontSize: "0.85rem", color: "var(--tcm-text-brand)", textDecoration: "none" }}>Import</a></li>
-        <li><a href="/collaboration" style={{ fontSize: "0.85rem", color: "var(--tcm-text-brand)", textDecoration: "none" }}>Collaboration</a></li>
-        <li><a href="/dashboard_and_kpi" style={{ fontSize: "0.85rem", color: "var(--tcm-text-brand)", textDecoration: "none" }}>Dashboard and KPI</a></li>
-      </ul>
-    </div>
+      <div>
+        <p style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", margin: "0 0 12px 0" }}>Reference</p>
+        <ul style={{ listStyle: "none", padding: "0", margin: "0", display: "flex", flexDirection: "column", gap: "9px" }}>
+          <li><a href="/api-reference" style={{ fontSize: "0.85rem", textDecoration: "none" }}>API Reference</a></li>
+          <li><a href="/get_started" style={{ fontSize: "0.85rem", textDecoration: "none" }}>Get Started</a></li>
+        </ul>
+      </div>
 
-    <div>
-      <p style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--tcm-text-secondary)", margin: "0 0 12px 0" }}>Reference</p>
-      <ul style={{ listStyle: "none", padding: "0", margin: "0", display: "flex", flexDirection: "column", gap: "9px" }}>
-        <li><a href="/api-reference" style={{ fontSize: "0.85rem", color: "var(--tcm-text-brand)", textDecoration: "none" }}>API Reference</a></li>
-        <li><a href="/get_started" style={{ fontSize: "0.85rem", color: "var(--tcm-text-brand)", textDecoration: "none" }}>Get Started</a></li>
-      </ul>
-    </div>
-
-    <div>
-      <p style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--tcm-text-secondary)", margin: "0 0 12px 0" }}>Community</p>
-      <ul style={{ listStyle: "none", padding: "0", margin: "0", display: "flex", flexDirection: "column", gap: "9px" }}>
-        <li><a href="https://github.com/Shanth025/test-case-management" style={{ fontSize: "0.85rem", color: "var(--tcm-text-brand)", textDecoration: "none" }}>GitHub</a></li>
-        <li><a href="https://github.com/Shanth025/test-case-management/blob/main/CONTRIBUTING.md" style={{ fontSize: "0.85rem", color: "var(--tcm-text-brand)", textDecoration: "none" }}>Contributing</a></li>
-        <li><a href="https://github.com/Shanth025/test-case-management/issues" style={{ fontSize: "0.85rem", color: "var(--tcm-text-brand)", textDecoration: "none" }}>Report an Issue</a></li>
-      </ul>
+      <div>
+        <p style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", margin: "0 0 12px 0" }}>Community</p>
+        <ul style={{ listStyle: "none", padding: "0", margin: "0", display: "flex", flexDirection: "column", gap: "9px" }}>
+          <li><a href="https://github.com/Shanth025/test-case-management" style={{ fontSize: "0.85rem", textDecoration: "none" }}>GitHub</a></li>
+          <li><a href="https://github.com/Shanth025/test-case-management/blob/main/CONTRIBUTING.md" style={{ fontSize: "0.85rem", textDecoration: "none" }}>Contributing</a></li>
+          <li><a href="https://github.com/Shanth025/test-case-management/issues" style={{ fontSize: "0.85rem", textDecoration: "none" }}>Report an Issue</a></li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
