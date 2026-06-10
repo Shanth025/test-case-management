@@ -1,12 +1,15 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "TCM Docs",
+  "name": "TestFlow Docs",
   "logo": {
     "light": "/static/tcm-logo-light.svg",
     "dark": "/static/tcm-logo-dark.svg"
   },
-  "favicon": "/static/favicon.png",
+  "favicon": "/static/tcm-favicon.png",
+  "appearance": {
+    "default": "dark"
+  },
   "colors": {
     "primary": "#534AB7",
     "light": "#7F77DD",
