@@ -6,7 +6,7 @@
     "light": "/static/tcm-logo-light.svg",
     "dark": "/static/tcm-logo-dark.svg"
   },
-  "favicon": "/static/favicon.svg",
+  "favicon": "/static/tcm-favicon.png",
   "appearance": {
     "default": "dark"
   },
